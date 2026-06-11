@@ -115,6 +115,50 @@ const run= async()=>{
           
         })
 
+//         app.patch('/bookings/:bookingId', async (req, res) => {
+//   const { bookingId } = req.params;
+//   const updateData = req.body;
+
+//   // try {
+//     const result = await bookings.updateOne(
+//       { _id: new ObjectId(bookingId) },
+//       { $set: updateData }
+//     );
+//     res.json(result);
+//   // } catch (err) {
+//   //   console.error('Error updating booking:', err);
+//   //   res.status(500).json({ error: 'Failed to update booking' });
+//   // }
+// });
+
+            app.patch('/bookings/:bookingId',async(req,res)=>{
+          const {bookingId}=req.params;
+          const updateData= req.body;
+
+          const result=await bookings.updateOne(
+            {_id: new ObjectId(bookingId) },
+            {$set:updateData}
+          )
+
+          res.json(result)
+          
+        })
+
+//         app.patch('/bookings/:bookingId', async (req, res) => {
+//   const { bookingId } = req.params;
+//   const updateData = req.body;
+
+//   const result = await user.updateOne(
+//     { _id: new ObjectId(bookingId) },  // ✅ wrap with ObjectId
+//     { $set: updateData }
+//   );
+
+//   res.json(result);
+// });
+
+
+
+
 
     //       app.get('/bookings',async(req,res)=>{
     //   const cursor=bookings.find();
