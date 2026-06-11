@@ -52,7 +52,17 @@ const run= async()=>{
 
     })
 
-        app.get('/appointments/:id',async(req,res)=>{
+        app.get('/appointments/:id',(req,res,next)=>{
+      const header=req.headers.authorization
+      if(header=='logged in'){
+        next()
+      }
+      else
+      {
+        res.status(401).json({message:"unauthorized"})
+      }
+        }, 
+          async(req,res)=>{
           const id=req.params.id;
         console.log(id);
         const query ={
