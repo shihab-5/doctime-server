@@ -5,7 +5,7 @@ const cors=require('cors')
 dotenv.config()
 
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
-const { createRemoteJWKSet } = require('jose-cjs')
+const { createRemoteJWKSet, jwtVerify } = require('jose-cjs')
 const port = process.env.PORT|| 5000
 
 app.use(cors())
@@ -94,7 +94,7 @@ const run= async()=>{
         //   const user=await userCollection.deleteOne(query);
         //   res.send(user);
         // })
-        app.patch('/user/:id',async(req,res)=>{
+        app.patch('/user/:id',verifyToken,async(req,res)=>{
           const {id}=req.params;
           const updateData= req.body;
 
@@ -114,7 +114,7 @@ const run= async()=>{
         //   res.send(result)
 
         // })
-           app.post('/bookings',async(req,res)=>{
+           app.post('/bookings',verifyToken,async(req,res)=>{
           const newUser=req.body;
           const result=await bookings.insertOne(newUser);
           console.log("new user",newUser)
@@ -153,7 +153,7 @@ const run= async()=>{
 //   // }
 // });
 
-            app.patch('/bookings/:bookingId',async(req,res)=>{
+            app.patch('/bookings/:bookingId',verifyToken,async(req,res)=>{
           const {bookingId}=req.params;
           const updateData= req.body;
 
