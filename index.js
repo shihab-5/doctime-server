@@ -122,14 +122,14 @@ const run= async()=>{
 
         })
         
-        app.get('/bookings/:userId',async(req,res)=>{
+        app.get('/bookings/:userId',verifyToken,async(req,res)=>{
           const {userId}=req.params;
 
           const result=await bookings.find({ userId :userId}).toArray();
           res.json(result)
           
         })
-        app.delete('/bookings/:bookingId',async(req,res)=>{
+        app.delete('/bookings/:bookingId',verifyToken,async(req,res)=>{
           const {bookingId}=req.params;
 
           const result=await bookings.deleteOne({ _id :new ObjectId(bookingId)});
