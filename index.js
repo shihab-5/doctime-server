@@ -30,7 +30,7 @@ app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
 
-const JWKS = createRemoteJWKSet(new URL(`http://localhost:3000/api/auth/jwks`));
+const JWKS = createRemoteJWKSet(new URL(`${process.env.CLIENT_URL}/api/auth/jwks`));
 
 const verifyToken = async (req, res, next) => {
   const authHeader = req?.headers.authorization;
@@ -62,7 +62,31 @@ const run= async()=>{
 
 
     app.get('/appointments',async(req,res)=>{
-      const cursor=userCollection.find();
+      let cursor;
+      const { search } = req.query;
+      if(search){
+      cursor=await userCollection.find({
+        // title: {$regex:search,$options:'i'}
+                 $or: [
+            {
+              title: {
+                $regex: search,
+                $options: 'i',
+              },
+            },
+            {
+              name: {
+                $regex: search,
+                $options: 'i',
+              },
+            },
+          ],
+      })
+      }
+      else
+        {
+          cursor=userCollection.find();
+        } 
       const result=await cursor.toArray();
       res.send(result);
 
@@ -190,8 +214,8 @@ const run= async()=>{
     // })
 
 
-    await client.connect();
-    await client.db("admin").command({ ping: 1 });
+    // await client.connect();
+    // await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // await client.close();
